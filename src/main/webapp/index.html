@@ -1,0 +1,93 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-csp="" ng-app="myApp">
+<!--<![endif]-->
+
+<head>
+
+<!-- <base href="/"> -->
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>AngularJS Boilerplate</title>
+<meta name="description"
+	content="Simple AngularJS Boilerplate to kick start your new project with SASS support and Gulp watch/build tasks">
+
+<!-- mobile meta -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+
+<!--[if IE]>
+			<link rel="shortcut icon" href="favicon.ico">
+		<![endif]-->
+<!-- or, set /favicon.ico for IE10 win -->
+<meta name="msapplication-TileColor" content="#f01d4f">
+
+<!-- CSS -->
+<!-- build:css css/style.min.css -->
+<link rel="stylesheet" type="text/css" href="./styles/style.css" />
+<!-- endbuild -->
+
+<!-- Angular external libraries for application -->
+	<!-- build:angularlibs js/angularlibs.js -->
+	<script src="./js/angular/angular.min.js"></script>
+
+</head>
+
+<body class="main-wrapper">
+
+	<!--[if lt IE 8]>
+		    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+
+	<div ng-controller="myCtrl" data-ng-init="myFunc()">
+
+		
+		<button ng-click="myFunc()" class="btn btn-primary">Refresh</button><input type="text" name="size" ng-model="size" maxlength="4"/>
+
+		<h1>{{content}}</h1>
+
+		<table border="1px">
+			<tr>
+				<th>Provider</th>
+				<th>Tomatoes</th>
+				<th>Sale date</th>
+			</tr>
+			<tr data-ng-repeat="market in tomatomarkets">
+				<td>{{market.provider}}</td>
+				<td>{{market.tomatoes}}</td>
+				<td>{{market.timestamp | date:'yyyy-MM-dd'}}</td>
+			</tr>
+		</table>
+	</div>
+
+	
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function($scope, $http) {
+			$scope.size = '';
+			$scope.myFunc = function() {
+				var parameters = {
+					size : $scope.size
+				};
+				var config = {
+					params : parameters
+				};
+				$http.get("http://localhost:8080/TomatoesMarket/data", config)
+						.then(function(response) {
+							$scope.tomatomarkets = response.data;
+						}, function(response) {
+							$scope.content = "Something went wrong";
+						});
+			}
+		});
+	</script>
+
+</body>
+
+
+</html>
